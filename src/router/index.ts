@@ -35,6 +35,21 @@ const router = createRouter({
           path: '/sysMenuList',
           name: 'sysMenuList',
           component: () => import('@/views/system/sysMenuList/index.vue')
+        },
+        {
+          path: '/houseBuilding',
+          name: 'houseBuilding',
+          component: () => import('@/views/house/houseBuilding/index.vue')
+        },
+        {
+          path: '/houseUnit',
+          name: 'houseUnit',
+          component: () => import('@/views/house/houseUnit/index.vue')
+        },
+        {
+          path: '/sysHouseList',
+          name: 'sysHouseList',
+          component: () => import('@/views/house/houseList/index.vue')
         }
       ]
     }

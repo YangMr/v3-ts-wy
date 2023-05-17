@@ -3,6 +3,13 @@ export const tableConfig = {
   // showIndexColumn: true,
   // showSelectionColumn: true,
   // showExpandColumn: true,
+  // showPagination: false,
+  // paginationParams: {
+  //   'page-sizes': [10, 20, 30, 50],
+  //   background: true,
+  //   layout: 'total, sizes, prev, pager, next, jumper'
+  // },
+  total: 200,
   tableParams: {
     size: 'small',
     height: '460'

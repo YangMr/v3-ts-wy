@@ -1,6 +1,15 @@
 <template>
   <div>
-    <BaseTable :tableList="tableList" v-bind="tableConfig">
+    <!--表单 -->
+    <QueryForm v-bind="formConfig" v-model="formData">
+      <template #button>
+        <el-button icon="search">查询</el-button>
+        <el-button icon="delete" @click="handleReset">重置</el-button>
+        <el-button icon="plus" type="primary">新增</el-button>
+      </template>
+    </QueryForm>
+    <!--表格 -->
+    <BaseTable v-model:page="page" :tableList="tableList" v-bind="tableConfig">
       <template #sex="scope">
         <el-tag :type="scope.row.sex == 1 ? '' : 'success'">
           {{ scope.row.sex == 1 ? '男' : '女' }}
@@ -39,9 +48,29 @@
 
 <script setup lang="ts">
 import BaseTable from '@/baseUI/table'
+import QueryForm from '@/baseUI/form'
 import { tableConfig } from './config/table.config'
-
+import { formConfig } from './config/form.config'
 import { ref } from 'vue'
+
+const formItems = formConfig?.formList?.filter((item) => item.field)
+const formOrigin = {}
+for (const item of formItems) {
+  formOrigin[item.field] = ''
+}
+
+const formData = ref(formOrigin)
+
+const page = ref({
+  currentPage: 1,
+  pageSize: 10
+})
+
+const handleReset = () => {
+  for (const key in formOrigin) {
+    formData.value[key] = formOrigin[key]
+  }
+}
 
 const tableList = ref([
   {
