@@ -1,15 +1,9 @@
-import {
-  AxiosRequestConfig,
-  AxiosResponse,
-  InternalAxiosRequestConfig
-} from 'axios'
+import type { AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 
 export interface RequestInterceptor {
   requestInterceptor?: (
     config: InternalAxiosRequestConfig<any>
-  ) =>
-    | InternalAxiosRequestConfig<any>
-    | Promise<InternalAxiosRequestConfig<any>>
+  ) => InternalAxiosRequestConfig<any> | Promise<InternalAxiosRequestConfig<any>>
   requestInterceptorCatch?: (error: any) => any
   responseInterceptor?: (
     res: AxiosResponse<any>

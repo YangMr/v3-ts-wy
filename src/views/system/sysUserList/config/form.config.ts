@@ -5,7 +5,7 @@ export const formConfig = {
     inline: true
   },
   colLayout: {
-    span: 12
+    span: 8
   },
   itemStyle: {
     // padding: '100px'

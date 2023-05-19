@@ -5,9 +5,10 @@
       <template #button>
         <el-button icon="search">查询</el-button>
         <el-button icon="delete" @click="handleReset">重置</el-button>
-        <el-button icon="plus" type="primary">新增</el-button>
+        <el-button icon="plus" type="primary" @click="handleOpenDialog('add')">新增</el-button>
       </template>
     </QueryForm>
+
     <!--表格 -->
     <BaseTable v-model:page="page" :tableList="tableList" v-bind="tableConfig">
       <template #sex="scope">
@@ -35,23 +36,86 @@
         />
         <span v-else></span>
       </template>
-      <template #action>
+      <template #action="scope">
         <div style="padding: 5px 0">
-          <el-button size="default" icon="EditPen" type="primary">编辑</el-button>
-          <el-button size="default" icon="EditPen" type="success">分配角色</el-button>
+          <el-button
+            size="default"
+            icon="EditPen"
+            type="primary"
+            @click="handleOpenDialog('edit', scope.row)"
+            >编辑</el-button
+          >
+          <el-button
+            size="default"
+            icon="EditPen"
+            type="success"
+            @click="handleOpenDialog('role', scope.row)"
+            >分配角色</el-button
+          >
           <el-button size="default" icon="Delete" type="danger">删除</el-button>
         </div>
       </template>
     </BaseTable>
+
+    <!-- 弹窗-->
+    <BaseDialog
+      :title="dialogTitle"
+      @cancel="handleCancel"
+      @confirm="handleConfirm"
+      :dialogVisible="dialogVisible"
+      :modalConfig="modalConfig"
+    >
+      <QueryForm v-bind="modalConfig" v-model="formDialogData"> </QueryForm>
+    </BaseDialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import BaseTable from '@/baseUI/table'
 import QueryForm from '@/baseUI/form'
+import BaseDialog from '@/baseUI/dialog'
 import { tableConfig } from './config/table.config'
 import { formConfig } from './config/form.config'
 import { ref } from 'vue'
+import { modalConfig } from './config/modal.config'
+
+const formDialogData = ref<any>({})
+
+const dialogVisible = ref(false)
+const dialogTitle = ref('')
+const handleOpenDialog = (type, row) => {
+  formDialogData.value = {}
+  const typeEnum = {
+    add: '新增用户',
+    edit: '编辑用户',
+    role: `为[${row.loginName}]分配角色`
+  }
+
+  if (type === 'edit') checkShowData(row)
+
+  dialogTitle.value = typeEnum[type]
+  dialogVisible.value = true
+}
+
+const checkShowData = (row: any) => {
+  for (const item of modalConfig.formList) {
+    console.log(item.field)
+    console.log(row)
+    formDialogData.value[item.field] = row[item.field]
+  }
+}
+
+const handleConfirm = () => {
+  if (Object.keys(formDialogData.value).length > 0) {
+    alert('edit')
+  } else {
+    alert('add')
+  }
+}
+
+const handleCancel = () => {
+  dialogVisible.value = false
+}
 
 const formItems = formConfig?.formList?.filter((item) => item.field)
 const formOrigin = {}

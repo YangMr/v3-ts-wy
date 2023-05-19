@@ -4,6 +4,8 @@
   "compilerOptions": {
     "composite": true,
     "module": "ESNext",
-    "types": ["node"]
+    "types": ["node","element-plus/global"],
+    // 若TS版本为5.x，此处值应为"node"
+    "moduleResolution": "node",
   }
 }

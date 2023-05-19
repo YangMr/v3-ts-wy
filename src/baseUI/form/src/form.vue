@@ -3,7 +3,9 @@
     <slot name="header"></slot>
   </div>
   <el-form ref="form" :model="formData" v-bind="formParams">
+    <!--    <el-row>-->
     <template v-for="(item, index) in formList" :key="index">
+      <!--        <el-col v-bind="colLayout">-->
       <el-form-item
         v-bind="item"
         v-if="item.type === 'input' || item.type === 'password'"
@@ -75,7 +77,9 @@
       <el-form-item v-else-if="item.type === 'slot'">
         <slot :name="item.slotName"></slot>
       </el-form-item>
+      <!--        </el-col>-->
     </template>
+    <!--    </el-row>-->
   </el-form>
   <div class="footer">
     <slot name="footer"></slot>
