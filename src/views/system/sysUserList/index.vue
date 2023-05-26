@@ -5,7 +5,13 @@
       <template #button>
         <el-button icon="search">查询</el-button>
         <el-button icon="delete" @click="handleReset">重置</el-button>
-        <el-button icon="plus" type="primary" @click="handleOpenDialog('add')">新增</el-button>
+        <el-button
+          icon="plus"
+          type="primary"
+          @click="handleOpenDialog('add')"
+          v-permission="'sys:user:add'"
+          >新增</el-button
+        >
       </template>
     </QueryForm>
 
@@ -42,6 +48,7 @@
             size="default"
             icon="EditPen"
             type="primary"
+            v-permission="'sys:user:edit'"
             @click="handleOpenDialog('edit', scope.row)"
             >编辑</el-button
           >
@@ -83,12 +90,12 @@ const formDialogData = ref<any>({})
 
 const dialogVisible = ref(false)
 const dialogTitle = ref('')
-const handleOpenDialog = (type, row) => {
+const handleOpenDialog = (type, row?) => {
   formDialogData.value = {}
   const typeEnum = {
     add: '新增用户',
     edit: '编辑用户',
-    role: `为[${row.loginName}]分配角色`
+    role: `为[${row?.loginName}]分配角色`
   }
 
   if (type === 'edit') checkShowData(row)

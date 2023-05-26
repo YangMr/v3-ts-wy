@@ -1,20 +1,38 @@
 <template>
   <el-menu
-    active-text-color="#ffd04b"
-    background-color="#545c64"
+    active-text-color="rgb(64, 158, 255)"
+    background-color="#304156"
     class="el-menu-vertical"
     :default-active="$route.path"
     text-color="#fff"
+    unique-opened
     router
   >
-    <!--    菜单渲染思路: 1. 如果渲染的菜单有子菜单,则通过el-submenu渲染-->
-    <!--                2. 如果渲染的菜单没有子菜单, 则通过el-menu-item渲染-->
-    <MenuItem v-for="(item, index) in menus" :key="index" :item="item" />
+    <!--   递归   函数自身调用自身, 必须要有结束的条件    递归   组件-->
+    <template v-for="item in menus" :key="item.path">
+      <el-menu-item v-if="item && !item.children" :index="item.path">
+        <el-icon><setting /></el-icon>
+        <span>{{ item.meta.title }}</span>
+      </el-menu-item>
+
+      <el-sub-menu v-else-if="item && item.children && item.children.length > 0" :index="item.path">
+        <template #title>
+          <el-icon><location /></el-icon>
+          <span>{{ item.meta.title }}</span>
+        </template>
+
+        <template v-for="childItem in item.children" :key="childItem.path">
+          <el-menu-item :index="childItem.path">
+            <el-icon><location /></el-icon>
+            <span>{{ childItem.meta.title }}</span>
+          </el-menu-item>
+        </template>
+      </el-sub-menu>
+    </template>
   </el-menu>
 </template>
 
 <script setup lang="ts">
-import MenuItem from './MenuItem.vue'
 const menus = [
   {
     path: '/dashboard',
@@ -308,68 +326,10 @@ const menus = [
     ]
   }
 ]
-
-// 一级菜单数据 与 非一级菜单数据
-let menuList = [
-  {
-    id: 1,
-    parentId: null,
-    name: '用户'
-  },
-  {
-    id: 2,
-    parentId: null,
-    name: '系统'
-  },
-  {
-    id: 3,
-    parentId: 1,
-    name: '员工管理'
-  },
-  {
-    id: 4,
-    parentId: 2,
-    name: '系统管理'
-  },
-  {
-    id: 5,
-    parentId: 3,
-    name: '正式员工'
-  },
-  {
-    id: 6,
-    parentId: 4,
-    name: '设备管理'
-  }
-]
-
-function formatToTree(menuList) {
-  // 1. 先拿到一级菜单数据
-  let parent = menuList.filter((item) => item.parentId == null)
-
-  // 2. 拿到非一级菜单数据
-  let notParent = menuList.filter((item) => item.parentId != null)
-
-  function deepData(p, notParent) {
-    p.forEach((item) => {
-      notParent.forEach((child) => {
-        if (item.id == child.parentId) {
-          deepData([child], notParent)
-
-          if (!item.children) {
-            item.children = [item]
-          } else {
-            item.children.push(item)
-          }
-        }
-      })
-    })
-  }
-  deepData(parent, notParent)
-
-  console.log('parent=', parent)
-}
-formatToTree(menuList)
 </script>
 
-<style scoped></style>
+<style scoped>
+.el-menu-vertical {
+  border-right: none;
+}
+</style>
